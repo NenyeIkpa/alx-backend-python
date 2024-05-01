@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-"""A coroutine called async_generator
-that takes no arguments
+"""A coroutine that will execute
+async_comprehension four times
 """
 import asyncio
-import random
-from typing import List
-
-async_generator = __import__('0-async_generator').async_generator
+import time
 
 
-async def async_comprehension() -> List[float]:
+async_comprehension = __import__('1-async_comprehension').async_comprehension
+
+
+async def measure_runtime() -> float:
     """
-    collects 10 random numbers
-    using async comprehension,
-    returns the 10 random numbers
+    returns the total runtime for 4 asynchronous
+    comprehension running in parallel
     """
-    result = [i async for i in async_generator()]
-    return result
+    start = time.perf_counter()
+    result = await asyncio.gather(*(async_comprehension() for _ in range(4)))
+    total_time = time.perf_counter() - start
+    return total_time
